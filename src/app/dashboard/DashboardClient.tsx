@@ -49,9 +49,7 @@ export default function DashboardClient({
       const data = await res.json();
 
       if (!res.ok) {
-        if (data.dailyLimitReached) {
-          setDailyLimitHit(true);
-        }
+        if (data.dailyLimitReached) setDailyLimitHit(true);
         setGenError(data.error ?? "Generation failed.");
       } else {
         router.push(`/briefings/${data.briefingId}`);
@@ -64,7 +62,7 @@ export default function DashboardClient({
   };
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8">
+    <div className="max-w-3xl mx-auto space-y-5 md:space-y-8">
       <div>
         <h1 className="text-xl font-semibold text-[#111]">Dashboard</h1>
         <p className="mt-1 text-sm text-gray-500">Your wine-market intelligence hub</p>
@@ -97,10 +95,10 @@ export default function DashboardClient({
 
       {/* Generate briefing */}
       <div className="card">
-        <div className="flex items-start justify-between gap-4 mb-4">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
           <div>
             <h2 className="text-sm font-semibold text-[#111]">Generate test briefing</h2>
-            <p className="mt-0.5 text-sm text-gray-500">
+            <p className="mt-0.5 text-sm text-gray-500 leading-relaxed">
               Searches recent wine news and summarises with AI. Limited to 1 per day.
             </p>
           </div>
@@ -112,24 +110,24 @@ export default function DashboardClient({
         </div>
 
         {!isReady && (
-          <div className="mb-4 rounded-md bg-amber-50 border border-amber-200 px-3 py-2 text-sm text-amber-800">
+          <div className="mb-4 rounded-md bg-amber-50 border border-amber-200 px-3 py-3 text-sm text-amber-800 leading-relaxed">
             Add at least one brand and one topic before generating.
           </div>
         )}
 
         {dailyLimitHit && (
-          <div className="mb-4 rounded-md bg-amber-50 border border-amber-200 px-3 py-2 text-sm text-amber-800">
+          <div className="mb-4 rounded-md bg-amber-50 border border-amber-200 px-3 py-3 text-sm text-amber-800 leading-relaxed">
             Already used today. Try again tomorrow.
           </div>
         )}
 
         {genError && !dailyLimitHit && (
-          <div className="mb-4 rounded-md bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">
+          <div className="mb-4 rounded-md bg-red-50 border border-red-200 px-3 py-3 text-sm text-red-700 leading-relaxed">
             {genError}
           </div>
         )}
 
-        <button onClick={handleGenerate} disabled={!canClick} className="btn-primary">
+        <button onClick={handleGenerate} disabled={!canClick} className="btn-primary w-full sm:w-auto">
           {generating ? (
             <>
               <Spinner />
@@ -146,14 +144,14 @@ export default function DashboardClient({
         <div className="card">
           <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">Latest briefing</p>
           <div className="flex items-start justify-between gap-4">
-            <div>
-              <p className="text-sm font-medium text-[#111]">{latestBriefing.title}</p>
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-[#111] truncate">{latestBriefing.title}</p>
               <p className="text-xs text-gray-400 mt-0.5">
                 {new Date(latestBriefing.created_at).toLocaleString()}
                 {latestBriefing.email_sent_at && " · Emailed"}
               </p>
             </div>
-            <Link href={`/briefings/${latestBriefing.id}`} className="btn-secondary text-xs whitespace-nowrap">
+            <Link href={`/briefings/${latestBriefing.id}`} className="btn-secondary text-xs whitespace-nowrap px-3 py-2 min-h-0">
               View
             </Link>
           </div>
@@ -163,10 +161,8 @@ export default function DashboardClient({
       {/* API usage panel */}
       <div className="card space-y-5">
         <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">API usage this month</p>
-
         <UsageMeter label="Exa news searches" used={exaUsage} cap={exaCap} color="bg-wine-700" />
         <UsageMeter label="OpenAI summaries" used={openaiUsage} cap={openaiCap} color="bg-blue-500" />
-
         <div className="flex items-center justify-between">
           <span className="text-sm text-gray-600">Emails sent</span>
           <span className="text-sm font-medium text-[#111]">{smtpUsage}</span>
@@ -182,13 +178,15 @@ function SetupCard({
   label: string; value: string; ok: boolean; href: string; hint?: string;
 }) {
   return (
-    <Link href={href} className="card block hover:border-wine-300 transition-colors">
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">{label}</span>
-        <span className={`h-1.5 w-1.5 rounded-full ${ok ? "bg-green-400" : "bg-amber-400"}`} />
+    <Link href={href} className="card flex items-center justify-between gap-3 sm:block hover:border-wine-300 transition-colors">
+      <div className="sm:mb-2">
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">{label}</span>
+          <span className={`h-1.5 w-1.5 rounded-full flex-shrink-0 ${ok ? "bg-green-400" : "bg-amber-400"}`} />
+        </div>
+        {hint && <p className="text-xs text-gray-400 mt-0.5 sm:mt-1">{hint}</p>}
       </div>
-      <p className="text-base font-semibold text-[#111] truncate">{value}</p>
-      {hint && <p className="text-xs text-gray-400 mt-1">{hint}</p>}
+      <p className="text-base font-semibold text-[#111] truncate flex-shrink-0 sm:flex-shrink">{value}</p>
     </Link>
   );
 }
@@ -215,14 +213,11 @@ function UsageMeter({ label, used, cap, color }: { label: string; used: number; 
 }
 
 function StatusBadge({ color, label }: { color: "green" | "amber"; label: string }) {
-  const styles = {
-    green: "bg-green-50 text-green-700 border-green-200",
-    amber: "bg-amber-50 text-amber-700 border-amber-200",
-  };
-  const dotStyles = { green: "bg-green-400", amber: "bg-amber-400" };
+  const styles = { green: "bg-green-50 text-green-700 border-green-200", amber: "bg-amber-50 text-amber-700 border-amber-200" };
+  const dot = { green: "bg-green-400", amber: "bg-amber-400" };
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium whitespace-nowrap ${styles[color]}`}>
-      <span className={`h-1.5 w-1.5 rounded-full ${dotStyles[color]}`} />
+    <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium whitespace-nowrap self-start ${styles[color]}`}>
+      <span className={`h-1.5 w-1.5 rounded-full ${dot[color]}`} />
       {label}
     </span>
   );

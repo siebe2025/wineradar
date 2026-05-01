@@ -5,31 +5,32 @@
 @layer base {
   body {
     @apply bg-[#FAFAFA] text-[#111] antialiased;
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center gap-2 rounded-md bg-wine-700 px-4 py-2 text-sm font-medium text-white transition hover:bg-wine-800 focus:outline-none focus:ring-2 focus:ring-wine-700 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-md bg-wine-700 px-4 py-3 md:py-2 text-sm font-medium text-white transition hover:bg-wine-800 focus:outline-none focus:ring-2 focus:ring-wine-700 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[44px];
   }
 
   .btn-secondary {
-    @apply inline-flex items-center gap-2 rounded-md border border-[#E5E7EB] bg-white px-4 py-2 text-sm font-medium text-[#374151] transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-wine-700 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-md border border-[#E5E7EB] bg-white px-4 py-3 md:py-2 text-sm font-medium text-[#374151] transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-wine-700 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[44px];
   }
 
   .btn-danger {
-    @apply inline-flex items-center gap-2 rounded-md border border-red-200 bg-red-50 px-4 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-md border border-red-200 bg-red-50 px-4 py-3 md:py-2 text-sm font-medium text-red-700 transition hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[44px];
   }
 
   .input {
-    @apply block w-full rounded-md border border-[#E5E7EB] bg-white px-3 py-2 text-sm placeholder:text-gray-400 focus:border-wine-700 focus:outline-none focus:ring-1 focus:ring-wine-700 disabled:bg-gray-50 disabled:text-gray-500;
+    @apply block w-full rounded-md border border-[#E5E7EB] bg-white px-3 py-3 md:py-2 text-base md:text-sm placeholder:text-gray-400 focus:border-wine-700 focus:outline-none focus:ring-1 focus:ring-wine-700 disabled:bg-gray-50 disabled:text-gray-500;
   }
 
   .label {
-    @apply block text-sm font-medium text-[#374151] mb-1;
+    @apply block text-sm font-medium text-[#374151] mb-1.5;
   }
 
   .card {
-    @apply rounded-lg border border-[#E5E7EB] bg-white p-6;
+    @apply rounded-lg border border-[#E5E7EB] bg-white p-4 md:p-6;
   }
 }

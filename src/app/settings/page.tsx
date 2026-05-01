@@ -70,16 +70,27 @@ export default function SettingsPage() {
     setSaving(false);
   };
 
+  const handleLogout = async () => {
+    const supabase2 = createClient();
+    await supabase2.auth.signOut();
+    window.location.href = "/login";
+  };
+
   return (
     <AppLayout>
-      <div className="max-w-lg mx-auto space-y-6">
+      <div className="max-w-lg mx-auto space-y-5 md:space-y-6">
         <div>
           <h1 className="text-xl font-semibold text-[#111]">Settings</h1>
-          <p className="mt-1 text-sm text-gray-500">Configure your weekly briefing delivery</p>
+          <p className="mt-0.5 text-sm text-gray-500">Configure your weekly briefing delivery</p>
         </div>
 
         {loading ? (
-          <div className="text-sm text-gray-400 py-12 text-center">Loading…</div>
+          <div className="flex items-center justify-center py-16">
+            <svg className="animate-spin h-5 w-5 text-gray-300" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+            </svg>
+          </div>
         ) : (
           <form onSubmit={handleSave} className="card space-y-5">
             <div>
@@ -120,9 +131,10 @@ export default function SettingsPage() {
               <button
                 type="button"
                 onClick={() => setIsEnabled(!isEnabled)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-wine-700 focus:ring-offset-2 ${
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-wine-700 focus:ring-offset-2 flex-shrink-0 ${
                   isEnabled ? "bg-wine-700" : "bg-gray-200"
                 }`}
+                aria-label={isEnabled ? "Disable weekly emails" : "Enable weekly emails"}
               >
                 <span
                   className={`inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${
@@ -134,7 +146,7 @@ export default function SettingsPage() {
 
             {message && (
               <div
-                className={`rounded-md px-3 py-2 text-sm ${
+                className={`rounded-md px-3 py-3 text-sm leading-relaxed ${
                   message.type === "success"
                     ? "bg-green-50 border border-green-200 text-green-700"
                     : "bg-red-50 border border-red-200 text-red-700"
@@ -144,13 +156,21 @@ export default function SettingsPage() {
               </div>
             )}
 
-            <div className="flex justify-end">
-              <button type="submit" disabled={saving} className="btn-primary">
-                {saving ? "Saving…" : "Save settings"}
-              </button>
-            </div>
+            <button type="submit" disabled={saving} className="btn-primary w-full">
+              {saving ? "Saving…" : "Save settings"}
+            </button>
           </form>
         )}
+
+        {/* Log out — accessible on mobile since top nav is hidden */}
+        <div className="md:hidden">
+          <button
+            onClick={handleLogout}
+            className="btn-secondary w-full text-gray-500"
+          >
+            Log out
+          </button>
+        </div>
       </div>
     </AppLayout>
   );
